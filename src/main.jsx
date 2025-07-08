@@ -16,7 +16,5 @@ root.render(
   </StrictMode>
 );
 
-window.addEventListener('appinstalled', () => {
-  console.log('✅ PWA Installed!');
-});
-
+// Option 2: Render Babu only (for testing or standalone use)
+// root.render(<Babu />);
