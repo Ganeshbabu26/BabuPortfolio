@@ -18,3 +18,15 @@ root.render(
 
 // Option 2: Render Babu only (for testing or standalone use)
 // root.render(<Babu />);
+// main.jsx or index.js
+
+// Remove existing service workers
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(registrations => {
+    for (let registration of registrations) {
+      registration.unregister().then(() => {
+        console.log('✅ Service worker unregistered.');
+      });
+    }
+  });
+}
