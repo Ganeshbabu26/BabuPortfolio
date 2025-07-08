@@ -1,52 +1,63 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import { VitePWA } from 'vite-plugin-pwa';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { VitePWA } from 'vite-plugin-pwa'
 
+// Vite config with PWA plugin
 export default defineConfig({
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'babu.jpg'],
+      includeAssets: [
+        'favicon.ico',
+        'babu.jpg',
+        'robots.txt',
+        'apple-touch-icon.png'
+      ],
       manifest: {
         name: 'Ganeshbabu Portfolio',
         short_name: 'Ganeshbabu',
-        description: 'A portfolio site for Ganeshbabu M - Developer & Student',
+        description: 'Portfolio of Ganeshbabu - Developer & CS Student',
         start_url: '/',
+        scope: '/',
         display: 'standalone',
         background_color: '#000000',
         theme_color: '#00ffe0',
         icons: [
           {
-            src: '/babu.jpg',
+            src: 'babu.jpg',
             sizes: '192x192',
             type: 'image/jpeg',
-            purpose: 'any'
+            purpose: 'any maskable'
           },
           {
-            src: '/babu.jpg',
+            src: 'babu.jpg',
             sizes: '512x512',
             type: 'image/jpeg',
-            purpose: 'any'
+            purpose: 'any maskable'
           }
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,jpg,png,svg}'],
         runtimeCaching: [
           {
-            urlPattern: ({ url }) => url.origin === self.location.origin,
+            urlPattern: ({ request }) => request.destination === 'document',
+            handler: 'NetworkFirst'
+          },
+          {
+            urlPattern: ({ request }) => 
+              ['style', 'script', 'image', 'font'].includes(request.destination),
             handler: 'CacheFirst',
             options: {
-              cacheName: 'static-resources',
+              cacheName: 'assets-cache',
               expiration: {
-                maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
-              },
-            },
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
+              }
+            }
           }
-        ],
+        ]
       }
     })
   ]
-});
+})
